@@ -14,6 +14,7 @@
 #include <vector> // pour utiliser les vecteurs de la librairie standard // to use vectors from the standard library
 #include <cstdlib> // pour convertir le input en int // to convert input to int
 #include <string> // pour le nom de fichier // for the file name
+#include <chrono>
 
 // commandes / command (PowerShell) :
 //  g++ -o climbing_difficulty.exe .\climbing_difficulty.cpp .\ClimbingDifficultyCalculator.cpp
@@ -29,7 +30,7 @@ int main(int argc, char *argv[])
 
     std::string filename = "wall1.txt";
     if (argc >= 2){
-        filename = argv[1];   
+        filename = argv[1];
     }
     ClimbingDifficultyCalculator Calculator = ClimbingDifficultyCalculator();
     int answer = Calculator.CalculateClimbingDifficulty(filename);
@@ -58,7 +59,17 @@ bool TestPrimeCalculator(){
         std::string basename = "wall";
         std::string extension = ".txt";
         std::string filename = basename + std::to_string(idx + 1) + extension;
+        // Enregistrez le temps au début de l'exécution de la fonction
+        auto start = std::chrono::high_resolution_clock::now();
         int ReceivedReturn = Calculator.CalculateClimbingDifficulty(filename);
+        // Enregistrez le temps à la fin de l'exécution de la fonction
+        auto end = std::chrono::high_resolution_clock::now();
+
+        // Calculez la durée en millisecondes
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+
+        // Affichez la durée
+        std::cout << "La fonction a pris " << duration << " millisecondes." << std::endl;
         if (ReceivedReturn != ExpectedReturns[idx])
             return false;
     }
