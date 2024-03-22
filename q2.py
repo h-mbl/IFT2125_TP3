@@ -22,7 +22,7 @@ def main(path) :
     # au lieu de faire plein d'analyse je peux juste utiliser try and catch :
     i = 0
     j = 0
-    global indexFirstLine,positionDernierElement, courtChemin
+    global indexFirstLine, courtChemin, positionDernierElement
     positionElement=[]
     courtChemin = 0
     indexFirstLine = None
@@ -39,106 +39,126 @@ def main(path) :
                 positionGauche = j-1
                 positionDroit = j+1
 
+                element=[]
                 # si la position < a 0 donc nous sommes en dehors de notre ligne par exemple pour (0,0)
                 if positionGauche >= 0:
                     # nous cherchons les elements au tours de l'element,il y a try-catch
-                    try : elementGauche = matrice[i][j-1]
-                    except : elementGauche = 0
-                else : elementGauche = 0
+                    try :
+                        elementGauche = matrice[i][j-1]
+                        element.append(elementGauche)
+                    except : pass
+                else : pass
 
                 if positionDroit < nombreColonne :
-                    try: elementDroite = matrice[i][j+1]
-                    except : elementDroite = 0
-                else : elementDroite = 0
+                    try:
+                        elementDroite = matrice[i][j+1]
+                        element.append(elementDroite)
+                    except : pass
+                else : pass
 
                 if positionhaut < nombreLigne * nombreColonne:
-                    try: elementHaut = matrice[i+1][j]
-                    except : elementHaut = 0
-                else : elementHaut = 0
+                    try:
+                        elementHaut = matrice[i+1][j]
+                        element.append(elementHaut)
+                    except : pass
+                else : pass
 
                 # on cherche le minimum de l'iteration
-                minimum = 0
-                tmp_minimum = [elementGauche, elementDroite, elementHaut]
-
                 # la boucle permet d'ignorer les elements hors du cadre
-                while minimum == 0 :
-                    minimum = min(tmp_minimum)
-                    if minimum == 0 :
-                        index = tmp_minimum.index(0)
-                        tmp_minimum.pop(index)
-                    else :
-                        firstLine.append(minimum + matrice[i][j])
+                minimum = min(element)
+                firstLine.append(minimum + matrice[i][j])
 
             indexFirstLine = firstLine.index(min(firstLine))
             positionDernierElement = [i,indexFirstLine]
             elementVisite.append(f"{i}{indexFirstLine}")
             courtChemin += matrice[i][indexFirstLine]
+
         else :
             firstLine = []
             truei = positionDernierElement[0]
             truej = positionDernierElement[1]
-            a = 0
+
+            if truei == 6 and truej == 1:
+                pass
+
             elementAnalyser =[]
+            element =[]
             try :
-                tmp = matrice[i][j - 1]
-                if f"{i}{j-1}" not in elementVisite:
+                tmp = matrice[truei][truej - 1]
+                if f"{truei}{truej-1}" not in elementVisite:
                     elementAnalyser.append(-1)
-            except : pass
+                else: elementAnalyser.append("None")
+            except: elementAnalyser.append("None")
+
 
             try :
-                tmp = matrice[i][j - 1]
-                if f"{i}{j + 1}" not in elementVisite:
+                tmp = matrice[truei][truej - 1]
+                if f"{truei}{truej + 1}" not in elementVisite:
                     elementAnalyser.append(1)
-            except : pass
+                else : elementAnalyser.append("None")
+            except : elementAnalyser.append("None")
 
             try :
-                tmp = matrice[i+1][j]
-                if f"{i+1}{j}" not in elementVisite:
+                tmp = matrice[truei+1][truej]
+                if f"{truei+1}{truej}" not in elementVisite:
                     elementAnalyser.append(2)
-            except : pass
+                else: elementAnalyser.append("None")
+            except: elementAnalyser.append("None")
 
             for k in elementAnalyser :
-                if k == 2 :
+
+
+                if  k == "None" :
+                    firstLine.append(10000000)
+                    continue
+
+                elif k == 2 :
                     j =  positionDernierElement[1]
                     i = positionDernierElement[0] + 1
+
                 else :
                     j = positionDernierElement[1] + k
                     i = positionDernierElement[0]
-
+                if j >= nombreColonne or i >= nombreLigne  :
+                    firstLine.append(10000000)
+                    continue
                 positionhaut = j + nombreColonne
                 positionGauche = j - 1
                 positionDroit = j + 1
                 if positionGauche >= 0:
                     try:
-                        elementGauche = matrice[i][j - 1]
-                        if i == truei and j-1 == truej:
-                            elementGauche = 0
-                    except: elementGauche = 0
-                else: elementGauche = 0
+                        if i == truei and j - 1 == truej:
+                            pass
+                        else :
+                            elementGauche = matrice[i][j - 1]
+                            element.append(elementGauche)
+                    except: pass
+                else: pass
 
                 if positionDroit < nombreColonne:
                     try:
                         elementDroite = matrice[i][j + 1]
                         if i == truei and j + 1 == truej:
-                            elementDroite = 0
-                    except: elementDroite = 0
-                else: elementDroite = 0
+                            pass
+                        else : element.append(elementDroite)
+                    except: pass
+                else: pass
 
                 if positionhaut < nombreLigne * nombreColonne:
-                    try:  elementHaut = matrice[i + 1][j]
-                    except: elementHaut = 0
-                else: elementHaut = 0
-                minimum = 0
-                tmp_minimum = [elementGauche, elementDroite, elementHaut]
-                while minimum == 0:
-                    minimum = min(tmp_minimum)
-                    if minimum == 0:
-                        index = tmp_minimum.index(0)
-                        tmp_minimum.pop(index)
-                    else :
-                        firstLine.append(minimum + matrice[i][j])
-            a = 0
-            index = firstLine.index(min(firstLine))
+                    try:
+                        elementHaut = matrice[i + 1][j]
+                        element.append(elementHaut)
+                    except: pass
+                else: pass
+
+                try : minimum = min(element)
+                except:
+                    minimum = None
+                    break
+                firstLine.append(minimum + matrice[i][j])
+
+            try :index = firstLine.index(min(firstLine))
+            except: break
             if index == 0:
                 positionDernierElement = [truei, truej - 1]
             elif index == 1:
