@@ -12,11 +12,14 @@ def main(path) :
 
             matrice.append(ligne_entiers)  # Ajouter la liste de la ligne à la matrice
     matrice = matrice[::-1]
-    print(matrice)
     # je dois creer un cadre
     nombreColonne = len(matrice[0])
     nombreLigne = len(matrice)
 
+
+    K = [[0 for x in range(nombreColonne )] for x in range(nombreLigne )]
+
+    #breakpoint()
     elementVisite= []
 
     # au lieu de faire plein d'analyse je peux juste utiliser try and catch :
@@ -32,6 +35,10 @@ def main(path) :
         if i == 0 and courtChemin == 0:
             # sauvegarder le resultat de la ligne
             firstLine =[]
+            if nombreLigne == 1 :
+                courtChemin += min(matrice[0])
+                print(courtChemin)
+                break
             for j in range(nombreColonne):
                 # en cherchant la position nous gerons notre cadre
                 # le but est de verifie si la potentiel valeur sera hors de notre cadre
@@ -72,20 +79,17 @@ def main(path) :
             positionDernierElement = [i,indexFirstLine]
             elementVisite.append(f"{i}{indexFirstLine}")
             courtChemin += matrice[i][indexFirstLine]
-
         else :
             firstLine = []
             truei = positionDernierElement[0]
             truej = positionDernierElement[1]
 
-            if truei == 6 and truej == 1:
-                pass
 
             elementAnalyser =[]
             element =[]
             try :
                 tmp = matrice[truei][truej - 1]
-                if f"{truei}{truej-1}" not in elementVisite:
+                if f"{truei}{truej-1}" not in elementVisite and truej-1 >= 0:
                     elementAnalyser.append(-1)
                 else: elementAnalyser.append("None")
             except: elementAnalyser.append("None")
@@ -93,14 +97,14 @@ def main(path) :
 
             try :
                 tmp = matrice[truei][truej - 1]
-                if f"{truei}{truej + 1}" not in elementVisite:
+                if f"{truei}{truej + 1}" not in elementVisite and truej-1 >= 0:
                     elementAnalyser.append(1)
                 else : elementAnalyser.append("None")
             except : elementAnalyser.append("None")
 
             try :
                 tmp = matrice[truei+1][truej]
-                if f"{truei+1}{truej}" not in elementVisite:
+                if f"{truei+1}{truej}" not in elementVisite and truei+1 < nombreLigne:
                     elementAnalyser.append(2)
                 else: elementAnalyser.append("None")
             except: elementAnalyser.append("None")
@@ -157,7 +161,11 @@ def main(path) :
                     break
                 firstLine.append(minimum + matrice[i][j])
 
-            try :index = firstLine.index(min(firstLine))
+            try :
+                if len(element) > 0:
+                    index = firstLine.index(min(firstLine))
+                else :
+                    pass
             except: break
             if index == 0:
                 positionDernierElement = [truei, truej - 1]
@@ -187,6 +195,10 @@ def main(path) :
                     elementVisite.append(f"{positionDernierElement[0]}{positionDernierElement[1]}")
                     print(positionDernierElement)
                     print(courtChemin)
-
+            if truei == 2 and truej == 0:
+                pass
+            if positionDernierElement[0] + 1 >= nombreLigne:
+                break
             #breakpoint()
-main("test.txt")
+main("C:/Users/herve/OneDrive/Documents/GitHub/IFT2125_TP3/Q2 Escalade/wall5.txt")
+#main("test.txt")
