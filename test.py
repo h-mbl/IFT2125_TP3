@@ -73,7 +73,7 @@ def main(path) :
                        # return courtChemin
                         continue
                     minimum = min(element)
-                    tableau[i][j] = minimum + matrice[i][j]
+                    tableau[i][j] = courtChemin + matrice[i][j]
                 else : continue
 
             tmp_position =[]
@@ -117,5 +117,5 @@ def main(path) :
             print("---------")
 
 
-main("C:/Users/herve/OneDrive/Documents/GitHub/IFT2125_TP3/Q2 Escalade/wall5.txt")
+main("./wall5.txt")
 #main("test.txt")
