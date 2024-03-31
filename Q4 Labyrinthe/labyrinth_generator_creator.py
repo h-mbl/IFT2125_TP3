@@ -23,8 +23,8 @@ class Strategy :
 
 class Algorithm1(Strategy) :
     #widson's algorithm
-    width = 4
-    height = 4
+    width = 13
+    height = 13
     def adjacentCells(self,pos:(int,int)):
         directions = [(0,1),(1,0),(0,-1),(-1,0)]
         cellAdjacents = []
@@ -78,7 +78,7 @@ class Algorithm1(Strategy) :
         unvisited.remove(start)
 
         while len(unvisited) != 0 :
-            print("new start")
+
 
            # choix = random.choice(unvisited)
            # if(choix == start) : continue
@@ -90,15 +90,15 @@ class Algorithm1(Strategy) :
             for pos in chemin:
                 visited.add(pos)
                 if pos in unvisited: unvisited.remove(pos)
-                print(len(visited),len(unvisited))
-                print(unvisited,pos,chemin,visited)
 
 
-        print("result is")
-        print(result)
+
+
+
         #le resultat est une liste des chemins passes qui combinent le labyrinth
         m = self.chemins2murs(result)
-        print(m)
+        code = self.translateMap2SCAD(m)
+        print(code)
         return result
 
     def chemins2murs(self,chemins):
@@ -118,6 +118,47 @@ class Algorithm1(Strategy) :
                         map[(x,y)] = 1
 
         return map
+
+    def rotationOrNot(self,p1,p2):
+        x = abs(p1[0] - p2[0])
+        y = abs(p1[1] - p2[1])
+        if (x,y) == (1,0): return False
+        elif (x,y) == (0,1): return True
+
+    def translateMap2SCAD(self,map):
+        #initialisation
+        result = "" #codeSCAD
+
+        result += "translate([-0.5,-0.5,-1]) cube(["+ str(self.height * cell_size +1)+',' + str(self.width * cell_size + 1)+ ", 1]); \n"
+        # base
+        milieu_width = self.width * cell_size/2
+        milieu_height = self.height * cell_size/2
+        # les 4 grand murs
+        result += "translate([0, %d, %d]){rotate([0,0,90]){cube([%d,1,%d], center = true);}} \n" %(milieu_height+ cell_size/2, cell_size/2 ,  self.height * cell_size +1 - cell_size,wall_height)
+        result += "translate([%d, %d, %d]){rotate([0,0,90]){cube([%d,1,%d], center = true);}} \n" % (cell_size*self.height,milieu_height, cell_size / 2, self.height * cell_size + 1, wall_height)
+        result += "translate([%d, 0, %d]){cube([%d,1,%d], center = true);} \n" % (milieu_width, cell_size / 2, self.height * cell_size + 1, wall_height)
+        result += "translate([%d, %d, %d]){cube([%d,1,%d], center = true);} \n" % (milieu_width, cell_size * self.width,cell_size/2, self.height * cell_size + 1, wall_height)
+
+        cases = []
+        for x in range(self.width):
+            for y in range(self.height):
+                cases.append((x,y))
+
+        for p1 in cases:
+            for p2 in cases:
+                if (p1 == p2): continue
+                print(map)
+                print(p1,p2)
+                print(map.has_key((p1,p2)), map.has_key((p2,p1)))
+                if (map[(p1,p2)] == 1 or map[(p2,p1)] == 1):
+                    rotation = self.rotationOrNot(p1,p2)
+                    rotation = rotation * 90
+                    x = p1[0] + p2[0] / 2
+                    y = p1[1] * p2[1] / 2
+                    result += "translate([%d, %d, %d]){rotate([0,0,%d]){cube([%d,1,%d], center = true);} } \n" %(x,y,wall_height/2,rotation,cell_size+1,wall_height)
+
+
+        print(result)
 
 
 

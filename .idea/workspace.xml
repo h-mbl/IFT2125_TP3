@@ -5,25 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="418bacef-eeab-41fb-99ad-f7f2ac7abd0d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q2 Escalade/ClimbingDifficultyCalculator.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Q2 Escalade/ClimbingDifficultyCalculator.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q2 Escalade/ClimbingDifficultyCalculator.h" beforeDir="false" afterPath="$PROJECT_DIR$/Q2 Escalade/ClimbingDifficultyCalculator.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q2 Escalade/cmake-build-debug/.cmake/api/v1/reply/index-2024-03-15T15-34-16-0242.json" beforeDir="false" afterPath="$PROJECT_DIR$/Q2 Escalade/cmake-build-debug/.cmake/api/v1/reply/index-2024-03-25T17-52-31-0886.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q2 Escalade/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/Q2 Escalade/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q2 Escalade/cmake-build-debug/CMakeFiles/Q2_Escalade.dir/ClimbingDifficultyCalculator.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/Q2 Escalade/cmake-build-debug/CMakeFiles/Q2_Escalade.dir/ClimbingDifficultyCalculator.cpp.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q2 Escalade/cmake-build-debug/CMakeFiles/Q2_Escalade.dir/ClimbingDifficultyCalculator.cpp.o.d" beforeDir="false" afterPath="$PROJECT_DIR$/Q2 Escalade/cmake-build-debug/CMakeFiles/Q2_Escalade.dir/ClimbingDifficultyCalculator.cpp.o.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q2 Escalade/cmake-build-debug/CMakeFiles/Q2_Escalade.dir/climbing_difficulty.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/Q2 Escalade/cmake-build-debug/CMakeFiles/Q2_Escalade.dir/climbing_difficulty.cpp.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q2 Escalade/cmake-build-debug/CMakeFiles/Q2_Escalade.dir/compiler_depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/Q2 Escalade/cmake-build-debug/CMakeFiles/Q2_Escalade.dir/compiler_depend.internal" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q2 Escalade/cmake-build-debug/CMakeFiles/Q2_Escalade.dir/compiler_depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/Q2 Escalade/cmake-build-debug/CMakeFiles/Q2_Escalade.dir/compiler_depend.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q2 Escalade/cmake-build-debug/Q2_Escalade" beforeDir="false" afterPath="$PROJECT_DIR$/Q2 Escalade/cmake-build-debug/Q2_Escalade" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q2 Escalade/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/Q2 Escalade/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q3 Vitre/vitre.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q3 Vitre/vitre.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/q2.py" beforeDir="false" afterPath="$PROJECT_DIR$/q2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/IFT2125_TP3.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/IFT2125_TP3.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q4 Labyrinthe/labyrinth_generator_creator.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q4 Labyrinthe/labyrinth_generator_creator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q4 Labyrinthe/test.scad" beforeDir="false" afterPath="$PROJECT_DIR$/Q4 Labyrinthe/test.scad" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,10 +52,12 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.labyrinth_generator_creator.executor": "Run",
     "Python.q2.executor": "Run",
     "Python.test.executor": "Run",
     "Python.test1.executor": "Run",
     "Python.test2.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/Users/herve/Downloads/jf",
@@ -85,8 +73,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-PY-241.14494.200" />
-        <option value="bundled-python-sdk-86178adc3299-28c9f5db9ffe-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.14494.200" />
+        <option value="bundled-python-sdk-d68999036c7f-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.14475.56" />
       </set>
     </attachedChunks>
   </component>
