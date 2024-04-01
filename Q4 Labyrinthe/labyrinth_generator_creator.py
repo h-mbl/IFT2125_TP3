@@ -23,8 +23,8 @@ class Strategy :
 
 class Algorithm1(Strategy) :
     #widson's algorithm
-    width = 13
-    height = 13
+    width = 3
+    height = 3
     def adjacentCells(self,pos:(int,int)):
         directions = [(0,1),(1,0),(0,-1),(-1,0)]
         cellAdjacents = []
@@ -102,22 +102,29 @@ class Algorithm1(Strategy) :
         return result
 
     def chemins2murs(self,chemins):
-        map = dict()
+        m = dict()
         for chemin in chemins:
             last = chemin[0]
+
 
             for i in range(1,len(chemin)):
 
                 curr = chemin[i]
 
-                map[(last,curr)] =  0
+                m[(last,curr)] = 0
                 last = curr
-            for x in range(self.width):
-                for y in range(self.width):
-                    if (x,y) not in map and (y,x) not in map:
-                        map[(x,y)] = 1
+            cases = []
+        for x in range(self.width):
+            for y in range(self.width):
+                cases.append((x,y))
+        for pos in cases:
+            adjacent = self.adjacentCells(pos)
+            for pos2 in adjacent:
+                if (pos2,pos) not in m:
+                    if (pos, pos2) not in m:
 
-        return map
+                        m[(pos,pos2)] = 1
+        return m
 
     def rotationOrNot(self,p1,p2):
         x = abs(p1[0] - p2[0])
@@ -125,8 +132,9 @@ class Algorithm1(Strategy) :
         if (x,y) == (1,0): return False
         elif (x,y) == (0,1): return True
 
-    def translateMap2SCAD(self,map):
+    def translateMap2SCAD(self,m):
         #initialisation
+        print(m)
         result = "" #codeSCAD
 
         result += "translate([-0.5,-0.5,-1]) cube(["+ str(self.height * cell_size +1)+',' + str(self.width * cell_size + 1)+ ", 1]); \n"
@@ -134,10 +142,10 @@ class Algorithm1(Strategy) :
         milieu_width = self.width * cell_size/2
         milieu_height = self.height * cell_size/2
         # les 4 grand murs
-        result += "translate([0, %d, %d]){rotate([0,0,90]){cube([%d,1,%d], center = true);}} \n" %(milieu_height+ cell_size/2, cell_size/2 ,  self.height * cell_size +1 - cell_size,wall_height)
-        result += "translate([%d, %d, %d]){rotate([0,0,90]){cube([%d,1,%d], center = true);}} \n" % (cell_size*self.height,milieu_height, cell_size / 2, self.height * cell_size + 1, wall_height)
-        result += "translate([%d, 0, %d]){cube([%d,1,%d], center = true);} \n" % (milieu_width, cell_size / 2, self.height * cell_size + 1, wall_height)
-        result += "translate([%d, %d, %d]){cube([%d,1,%d], center = true);} \n" % (milieu_width, cell_size * self.width,cell_size/2, self.height * cell_size + 1, wall_height)
+        result += "translate([0, %f, %f]){rotate([0,0,90]){cube([%f,1,%f], center = true);}} \n" %(milieu_height+ cell_size/2, cell_size/2 ,  self.height * cell_size +1 - cell_size,wall_height)
+        result += "translate([%f, %f, %f]){rotate([0,0,90]){cube([%f,1,%f], center = true);}} \n" % (cell_size*self.height,milieu_height, cell_size / 2, self.height * cell_size + 1, wall_height)
+        result += "translate([%f, 0, %f]){cube([%f,1,%f], center = true);} \n" % (milieu_width, cell_size / 2, self.height * cell_size + 1, wall_height)
+        result += "translate([%f, %f, %f]){cube([%f,1,%f], center = true);} \n" % (milieu_width, cell_size * self.width,cell_size/2, self.height * cell_size + 1, wall_height)
 
         cases = []
         for x in range(self.width):
@@ -145,22 +153,34 @@ class Algorithm1(Strategy) :
                 cases.append((x,y))
 
         for p1 in cases:
-            for p2 in cases:
-                if (p1 == p2): continue
-                print(map)
-                print(p1,p2)
-                print(map.has_key((p1,p2)), map.has_key((p2,p1)))
-                if (map[(p1,p2)] == 1 or map[(p2,p1)] == 1):
-                    rotation = self.rotationOrNot(p1,p2)
-                    rotation = rotation * 90
-                    x = p1[0] + p2[0] / 2
-                    y = p1[1] * p2[1] / 2
-                    result += "translate([%d, %d, %d]){rotate([0,0,%d]){cube([%d,1,%d], center = true);} } \n" %(x,y,wall_height/2,rotation,cell_size+1,wall_height)
+            adjacent = self.adjacentCells(p1)
+            for p2 in adjacent:
+
+
+                if (p1,p2) in m:
+                    if m[(p1,p2)] == 1:
+                        result += self.murGeneration(p1,p2)
+                        print(p1,p2)
+
+
+                elif (p2,p1) in m:
+                    if m[(p2,p1)] == 1:
+                        result += self.murGeneration(p1,p2)
+                        print(p1,p2)
+
+
 
 
         print(result)
+    def murGeneration(self,p1,p2):
 
-
+        rotation = self.rotationOrNot(p1, p2)
+        rotation = rotation * 90
+        x = ((p1[0]+1) + (p2[0] +1)) / 2
+        y = ((p1[1] +1) + (p2[1] +1))/ 2
+        result = "translate([%f, %f, %f]){rotate([0,0,%f]){cube([%f,1,%f], center = true);} } \n" % (
+        cell_size * x, cell_size * y, wall_height / 2, rotation, cell_size + wall_thickness, wall_height)
+        return result
 
     def Apply(self):
         #super().Apply()
