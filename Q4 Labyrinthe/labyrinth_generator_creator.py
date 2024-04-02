@@ -268,7 +268,7 @@ class Algorithm2(Strategy) :
             self.grid[y][nx] = 0
 
     def Apply(self):
-        print("Applying Algorithm1")
+        print("Applying Algorithm2")
         # Forcer la première ligne (y = 0)
         a = 0
         start_y  = 0
@@ -278,7 +278,6 @@ class Algorithm2(Strategy) :
         self.visited[start_y][start_x] = True
         # on appelle la fonction backtracker avec les starts elements
         self.backtracker(start_x, start_y)
-        print("Applying Algorithm1")
        # self.translateMap2SCAD('maze.scad', self.width, self.height)
 
     def chemins2murs2(self,resultat):
@@ -315,6 +314,9 @@ class Algorithm2(Strategy) :
                 y = (y1 + y2) * cell_size / 2
                 result += f"translate([{x}, {y}, {wall_height / 2}]){{rotate([0,0,{rotation}]){{cube([{cell_size + 1},1,{wall_height}], center = true);}}}}\n"
 
+        print("-----------------------------")
+        print(result)
+        breakpoint()
         return result
 
     def rotationOrNot(self, p1, p2):
