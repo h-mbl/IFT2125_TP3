@@ -1,6 +1,9 @@
 import sys
 from queue import PriorityQueue
 
+global elementVisite
+elementVisite = []
+
 def read_matrix_from_file(filename):
     matrix = []
     with open(filename, 'r') as file:
@@ -48,6 +51,7 @@ def dijkstra(graph, source, n):
             new_dist = total_weight + weight
             if to not in min_distance or new_dist < min_distance[to]:
                 min_distance[to] = new_dist
+                elementVisite.append(to)
                 pq.put((new_dist, to))
 
     min_to_top = sys.maxsize
@@ -62,15 +66,19 @@ def find_minimum_path(matrix):
     min_path = sys.maxsize
     grandtableau = []
     for i in range(n):
+        #elementVisite =[]
         source = (m - 1) * n + i
         min_path = min(min_path, dijkstra(graph, source, n))
         grandtableau.append(min_path)
+        print(elementVisite)
+        #breakpoint()
     print(grandtableau)
+    if 264881 in grandtableau: print("ok")
     return min_path
 
 if __name__ == "__main__":
-    #filename = "C:/Users/herve/OneDrive/Documents/GitHub/IFT2125_TP3/Q2 Escalade/wall5.txt"
-    filename = "test.txt"
+    filename = "C:/Users/herve/OneDrive/Documents/GitHub/IFT2125_TP3/Q2 Escalade/wall5.txt"
+    #filename = "test.txt"
     matrix = read_matrix_from_file(filename)
     min_difficulty = find_minimum_path(matrix)
     print(f"Minimum total difficulty: {min_difficulty}")
