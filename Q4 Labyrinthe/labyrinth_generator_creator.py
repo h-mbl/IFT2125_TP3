@@ -209,7 +209,29 @@ class Algorithm2(Strategy) :
         # Initialisation du chemin avec le point de départ (0,0)
         self.chemin = [(0, 0)]
         self.stack = [(0, 0)]
+    #""""
 
+    def backtracker(self, x, y):
+        # ici,on cherhce les elements non-visites de notre element actuel
+        neighbors = self.get_unvisited_neighbors(x, y)
+        # si la liste est vide, ce qu'on a visite tous les elements proches
+        if not neighbors:
+            print(len(self.chemin))
+            breakpoint()
+            #m = self.chemins2murs2(self.chemin)
+            self.translateGridToSCAD()
+            return
+
+        # on choisit aleatoirement  l'element qui sera place comme visite dans la liste des voisns
+        nx, ny = random.choice(neighbors)
+        # on supprimer le mur
+        self.remove_wall(x, y, nx, ny)
+        self.visited[ny][nx] = True
+        # on fait une reccursion
+        self.chemin.append((nx,ny))
+        self.backtracker(nx, ny)
+
+    """
     def backtracker(self, x, y):
         # Marquer la cellule actuelle comme visitée
         self.visited[y][x] = True
@@ -236,10 +258,9 @@ class Algorithm2(Strategy) :
                 self.visited[ny][nx] = True
                 self.chemin.append((nx, ny))
 
-        # Une fois tous les chemins explorés, générer la sortie SCAD
-        m = self.chemins2murs2(self.chemin)
-        self.translateMap2SCAD(m)
 
+        self.translateGridToSCAD()
+    # """
     def get_unvisited_neighbors(self, x, y):
         # enregistre les elements visites
         neighbors = []
@@ -280,60 +301,42 @@ class Algorithm2(Strategy) :
         self.backtracker(start_x, start_y)
        # self.translateMap2SCAD('maze.scad', self.width, self.height)
 
-    def chemins2murs2(self,resultat):
-        resultat_map = {}
-        for x in range(self.width):
-            for y in range(self.height):
-                for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
-                    nx, ny = x + dx, y + dy
-                    if 0 <= nx < self.width and 0 <= ny < self.height:
-                        resultat_map[(x, y), (nx, ny)] = int(
-                            ((x, y), (nx, ny)) not in resultat and ((nx, ny), (x, y)) not in resultat)
-        return resultat_map
-
-    def translateMap2SCAD(self, resultat_map):
-        result = "translate([-0.5,-0.5,-1]) cube([{}, {}, 1]);\n".format(self.height * cell_size + 1,
-                                                                         self.width * cell_size + 1)
+    def translateGridToSCAD(self):
+        # Initialisation du résultat SCAD
+        result =  "translate([-0.5,-0.5,-1]) cube(["+ str(self.height * cell_size +1)+',' + str(self.width * cell_size + 1)+ ", 1]); \n"
+        # base
         milieu_width = self.width * cell_size / 2
         milieu_height = self.height * cell_size / 2
+        result += "translate([0, %f, %f]){rotate([0,0,90]){cube([%f,1,%f], center = true);}} \n" % (
+        milieu_height + cell_size / 2, cell_size / 2, self.height * cell_size + 1 - cell_size, wall_height)
+        result += "translate([%f, %f, %f]){rotate([0,0,90]){cube([%f,1,%f], center = true);}} \n" % (
+        cell_size * self.height, milieu_height, cell_size / 2, self.height * cell_size + 1, wall_height)
+        result += "translate([%f, 0, %f]){cube([%f,1,%f], center = true);} \n" % (
+        milieu_width, cell_size / 2, self.height * cell_size + 1, wall_height)
+        result += "translate([%f, %f, %f]){cube([%f,1,%f], center = true);} \n" % (
+        milieu_width, cell_size * self.width, cell_size / 2, self.height * cell_size + 1, wall_height)
 
-        # Construire les murs extérieurs
-        wall_commands = [
-            f"translate([0, {milieu_height + cell_size / 2}, {cell_size / 2}]){{rotate([0,0,90]){{cube([{self.height * cell_size + 1 - cell_size},1,{wall_height}], center = true);}}}}",
-            f"translate([{cell_size * self.height}, {milieu_height}, {cell_size / 2}]){{rotate([0,0,90]){{cube([{self.height * cell_size + 1},1,{wall_height}], center = true);}}}}",
-            f"translate([{milieu_width}, 0, {cell_size / 2}]){{cube([{self.height * cell_size + 1},1,{wall_height}], center = true);}}",
-            f"translate([{milieu_width}, {cell_size * self.width}, {cell_size / 2}]){{cube([{self.height * cell_size + 1},1,{wall_height}], center = true);}}"
-        ]
-        result += "\n".join(wall_commands) + "\n"
+        # Générer les côtés des murs
+        for y in range(self.height):
+            for x in range(self.width):
+                if self.grid[y][x] == 1:  # C'est un mur
+                    # Vérifier chaque direction pour les passages adjacents
+                    directions = [(0, -1), (1, 0), (0, 1), (-1, 0)]  # Sud, Est, Nord, Ouest
+                    for dx, dy in directions:
+                        nx, ny = x + dx, y + dy
+                        #if 0 <= nx < self.width and 0 <= ny < self.height and self.grid[ny][nx] == 0:
+                        if 0 <= nx < self.width and 0 <= ny < self.height and [ny,nx] not in self.visited:
+                            # Calculer la position et l'orientation du mur
+                            cx = x * cell_size + (dx * cell_size / 2)
+                            cy = y * cell_size + (dy * cell_size / 2)
+                            rotation = 0 if dy == 0 else 90
+                            # Générer le mur
+                            result += f"translate([{cx + cell_size / 2}, {cy + cell_size / 2}, {wall_height / 2}]){{rotate([0,0,{rotation}]){{cube([{cell_size}, 1, {wall_height}], center = true);}}}}\n"
 
-        # Ajouter les murs intérieurs
-        for (x1, y1), (x2, y2) in resultat_map.keys():
-            if resultat_map[(x1, y1), (x2, y2)] == 1:
-                rotation = self.rotationOrNot((x1, y1,), (x2, y2)) * 90
-                x = (x1 + x2) * cell_size / 2
-                y = (y1 + y2) * cell_size / 2
-                result += f"translate([{x}, {y}, {wall_height / 2}]){{rotate([0,0,{rotation}]){{cube([{cell_size + 1},1,{wall_height}], center = true);}}}}\n"
-
-        print("-----------------------------")
         print(result)
         breakpoint()
         return result
 
-    def rotationOrNot(self, p1, p2):
-        x1, y1 = p1
-        x2, y2 = p2
-
-        dx = abs(x1 - x2)
-        dy = abs(y1 - y2)
-
-        if dx == 1 and dy == 0:
-            # Les cellules sont horizontalement adjacentes
-            return False
-        elif dx == 0 and dy == 1:
-            # Les cellules sont verticalement adjacentes
-            return True
-        else:
-            raise ValueError(f"Les cellules {p1} et {p2} ne sont pas adjacentes.")
 
 class Generator() :
     strategy = None
