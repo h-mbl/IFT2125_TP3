@@ -48,25 +48,39 @@ def main(path):
                     # dans notre tableau on place le court chemin temporaire
                     tableau[cas_i][cas_j] = tmp_courtChemin
 
-                    # je prends l'element le plus minim qui me permettra d'escalader
-                    tmp_element = []
+                    tmp_visite =[]
 
-                    # on verifie la droite
-                    if cas_j + 1 < nombreColonne and [cas_i, cas_j + 1] not in elementVisite and cas_i > 0:
-                        tmp_element.append(tmp_courtChemin + matrice[cas_i][cas_j + 1])
+                    while cas_i < i + 1:
 
-                    # on verifie la gauche
-                    if  cas_j - 1 >= 0 and [cas_i, cas_j - 1] not in elementVisite  and cas_i > 0:
-                        tmp_element.append(tmp_courtChemin + matrice[cas_i][cas_j - 1])
+                        # je prends l'element le plus minime qui me permettra d'escalader
+                        tmp_element = []
+                        tmp_position = []
 
-                    # on verifie en haut
-                    if cas_i + 1 < nombreLigne and [cas_i + 1, cas_j] not in elementVisite:
-                        tmp_element.append(tmp_courtChemin + matrice[cas_i + 1][cas_j])
+                        # on verifie la droite
+                        if cas_j + 1 < nombreColonne and [cas_i, cas_j + 1] not in elementVisite and cas_i > 0 and [cas_i, cas_j+1] not in tmp_visite:
+                            tmp_element.append(tmp_courtChemin + matrice[cas_i][cas_j + 1])
+                            tmp_position.append([cas_i,cas_j + 1])
 
-                    if len(tmp_element) > 0:
-                        minimum = min(tmp_element)
-                        tabposition.append([cas_i,cas_j])
-                        tabvaleur.append(minimum)
+                        # on verifie la gauche
+                        if  cas_j - 1 >= 0 and [cas_i, cas_j - 1] not in elementVisite  and cas_i > 0 and [cas_i, cas_j-1] not in tmp_visite:
+                            tmp_element.append(tmp_courtChemin + matrice[cas_i][cas_j - 1])
+                            tmp_position.append([cas_i,cas_j - 1])
+
+                        # on verifie en haut
+                        if cas_i + 1 < nombreLigne and [cas_i + 1, cas_j] not in elementVisite and [cas_i + 1, cas_j] not in tmp_visite :
+                            tmp_element.append(tmp_courtChemin + matrice[cas_i + 1][cas_j])
+                            tmp_position.append([cas_i + 1,cas_j])
+
+                        if len(tmp_element) > 0:
+                            minimum = min(tmp_element)
+                            tmp_nouvelle_position = tmp_position[tmp_element.index(minimum)]
+                            cas_i = tmp_nouvelle_position[0]
+                            cas_j = tmp_nouvelle_position[1]
+                            tableau[cas_i][cas_j] = minimum
+                            tmp_visite.append([cas_i,cas_j])
+                            tmp_courtChemin = minimum
+                    tabposition.append([cas_i,cas_j])
+                    tabvaleur.append(tableau[cas_i][cas_j])
 
             index = tabvaleur.index(min(tabvaleur))
             nouveauI,nouveauJ = tabposition[index]
@@ -75,6 +89,7 @@ def main(path):
             positionDernierElement[0] = nouveauI
             positionDernierElement[1] = nouveauJ
             if nouveauI + 1 == nombreLigne:
+                print(elementVisite)
                 return courtChemin
 
     if nombreLigne <= 1:
@@ -83,11 +98,13 @@ def main(path):
 
     grandtableau = []
     for j in range(nombreColonne):
+        if j == 2:
+            a = 0
         # je cree une matrice vide
         tableau = [[0 for x in range(nombreColonne)] for x in range(nombreLigne)]
         elementVisite = []
         i = 0
-        tableau[i][j] = matrice[1][j] + matrice[1][j]
+        tableau[i][j] = matrice[1][j] + matrice[0][j]
 
         positionDernierElement = [0, j]
 
@@ -95,10 +112,8 @@ def main(path):
         courtChemin = matrice[0][j]
         tmp_courtChemin = case(i,positionDernierElement,courtChemin)
         grandtableau.append(tmp_courtChemin)
-    if 350639 in grandtableau:
-        print("350639")
     print(min(grandtableau))
     print(grandtableau)
 
-main("C:/Users/herve/OneDrive/Documents/GitHub/IFT2125_TP3/Q2 Escalade/wall5.txt")
-#main("test.txt")
+#main("C:/Users/herve/OneDrive/Documents/GitHub/IFT2125_TP3/Q2 Escalade/wall5.txt")
+main("test.txt")
