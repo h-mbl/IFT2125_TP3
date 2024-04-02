@@ -39,10 +39,7 @@ def calcul_value(start, end, k, table):
 def vitre(N, k):
     tab = [[[0] * (k + 1) for _ in range(N + 1)]for _ in range(N+1)]
 
-   # for i in range(1, N + 1):
-    #    for j in range(1, N + 1):
-     #       for p in range(1, k+1):
-      #          tab[i][j][p] = calcul_value(i, j, p, tab)
+
     tab[1][N][k] = calcul_value(1,N,k,tab) # on n'a pas besoin de calculer tous les elements du tab,
                                                 # il faut juste calculer les donnees(sous-questions) besoins
     print(tab[1][N])

@@ -23,8 +23,8 @@ class Strategy :
 
 class Algorithm1(Strategy) :
     #widson's algorithm
-    width = 3
-    height = 3
+    width = 13
+    height = 13
     def adjacentCells(self,pos:(int,int)):
         directions = [(0,1),(1,0),(0,-1),(-1,0)]
         cellAdjacents = []
@@ -97,9 +97,10 @@ class Algorithm1(Strategy) :
 
         #le resultat est une liste des chemins passes qui combinent le labyrinth
         m = self.chemins2murs(result)
+
         code = self.translateMap2SCAD(m)
         print(code)
-        return result
+        return m
 
     def chemins2murs(self,chemins):
         m = dict()
@@ -134,7 +135,7 @@ class Algorithm1(Strategy) :
 
     def translateMap2SCAD(self,m):
         #initialisation
-        print(m)
+
         result = "" #codeSCAD
 
         result += "translate([-0.5,-0.5,-1]) cube(["+ str(self.height * cell_size +1)+',' + str(self.width * cell_size + 1)+ ", 1]); \n"
@@ -160,27 +161,35 @@ class Algorithm1(Strategy) :
                 if (p1,p2) in m:
                     if m[(p1,p2)] == 1:
                         result += self.murGeneration(p1,p2)
-                        print(p1,p2)
+
 
 
                 elif (p2,p1) in m:
                     if m[(p2,p1)] == 1:
                         result += self.murGeneration(p1,p2)
-                        print(p1,p2)
+
+
+        return result
 
 
 
 
-        print(result)
+
     def murGeneration(self,p1,p2):
 
         rotation = self.rotationOrNot(p1, p2)
         rotation = rotation * 90
-        x = ((p1[0]+1) + (p2[0] +1)) / 2
-        y = ((p1[1] +1) + (p2[1] +1))/ 2
-        result = "translate([%f, %f, %f]){rotate([0,0,%f]){cube([%f,1,%f], center = true);} } \n" % (
-        cell_size * x, cell_size * y, wall_height / 2, rotation, cell_size + wall_thickness, wall_height)
+
+        if rotation != 0:
+            result = "translate([%f, %f, %f]){rotate([0,0,%f]){cube([%f,1,%f], center = true);} } \n" % (
+                (max(p1[1],p2[1]))*cell_size, p1[0] * cell_size+ cell_size/2, wall_height / 2, rotation, cell_size + wall_thickness, wall_height)
+        else:
+            result = "translate([%f, %f, %f]){rotate([0,0,%f]){cube([%f,1,%f], center = true);} } \n" % (
+                p1[1] * cell_size + cell_size/2, max(p1[0],p2[0]) * cell_size , wall_height / 2, rotation,
+                cell_size + wall_thickness, wall_height)
+
         return result
+
 
     def Apply(self):
         #super().Apply()
@@ -194,6 +203,8 @@ class Algorithm2(Strategy) :
 
 class Generator() :
     strategy = None
+
+
 
     def __init__(self):
         pass
