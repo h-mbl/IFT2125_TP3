@@ -1,15 +1,4 @@
 def main(path) :
-    def element_doublon_et_valeur(tableau):
-        elements_vus = set()  # Un ensemble pour stocker les éléments déjà rencontrés
-
-        for element in tableau:
-            if element in elements_vus:
-                return element  # Retourne l'élément en double
-            else:
-                elements_vus.add(element)  # Sinon, ajoutez-le à l'ensemble
-
-        return None  # Si aucun élément n'est en double, retournez None
-
     matrice = []
     with open(path, 'r') as fichier:
         for ligne in fichier:  # Lire chaque ligne du fichier
@@ -243,5 +232,5 @@ def main(path) :
                 break
 
 
-main("./wall5.txt")
+main("C:/Users/herve/OneDrive/Documents/GitHub/IFT2125_TP3/Q2 Escalade/wall5.txt")
 #main("test.txt")

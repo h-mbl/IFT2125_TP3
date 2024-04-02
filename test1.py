@@ -188,5 +188,5 @@ def main(path) :
             print(elementVisite[-1])
             print(courtChemin)
 
-main("./wall5.txt")
+main("C:/Users/herve/OneDrive/Documents/GitHub/IFT2125_TP3/Q2 Escalade/wall5.txt")
 #main("test.txt")
