@@ -238,5 +238,5 @@ def main(path):
 
 
 
-#main("C:/Users/herve/OneDrive/Documents/GitHub/IFT2125_TP3/Q2 Escalade/wall5.txt")
-main("test.txt")
+main("C:/Users/herve/OneDrive/Documents/GitHub/IFT2125_TP3/Q2 Escalade/wall5.txt")
+#main("test.txt")

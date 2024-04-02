@@ -57,12 +57,12 @@ def main(path):
                         tmp_position = []
 
                         # on verifie la droite
-                        if cas_j + 1 < nombreColonne and [cas_i, cas_j + 1] not in elementVisite and cas_i > 0 and [cas_i, cas_j+1] not in tmp_visite:
+                        if cas_j + 1 < nombreColonne and [cas_i, cas_j + 1] not in elementVisite and cas_i > 0 and [cas_i, cas_j+1] not in tmp_visite :
                             tmp_element.append(tmp_courtChemin + matrice[cas_i][cas_j + 1])
                             tmp_position.append([cas_i,cas_j + 1])
 
                         # on verifie la gauche
-                        if  cas_j - 1 >= 0 and [cas_i, cas_j - 1] not in elementVisite  and cas_i > 0 and [cas_i, cas_j-1] not in tmp_visite:
+                        if  cas_j - 1 >= 0 and [cas_i, cas_j - 1] not in elementVisite  and cas_i > 0 and [cas_i, cas_j-1] not in tmp_visite :
                             tmp_element.append(tmp_courtChemin + matrice[cas_i][cas_j - 1])
                             tmp_position.append([cas_i,cas_j - 1])
 
@@ -74,6 +74,8 @@ def main(path):
                         if len(tmp_element) > 0:
                             minimum = min(tmp_element)
                             tmp_nouvelle_position = tmp_position[tmp_element.index(minimum)]
+                            if [cas_i, cas_j] not in tmp_visite:
+                                tmp_visite.append([cas_i, cas_j])
                             cas_i = tmp_nouvelle_position[0]
                             cas_j = tmp_nouvelle_position[1]
                             tableau[cas_i][cas_j] = minimum
@@ -89,17 +91,15 @@ def main(path):
             positionDernierElement[0] = nouveauI
             positionDernierElement[1] = nouveauJ
             if nouveauI + 1 == nombreLigne:
-                print(elementVisite)
                 return courtChemin
 
     if nombreLigne <= 1:
         courtChemin = min(matrice[0])
+        print(courtChemin)
         return courtChemin
 
     grandtableau = []
     for j in range(nombreColonne):
-        if j == 2:
-            a = 0
         # je cree une matrice vide
         tableau = [[0 for x in range(nombreColonne)] for x in range(nombreLigne)]
         elementVisite = []
@@ -113,7 +113,7 @@ def main(path):
         tmp_courtChemin = case(i,positionDernierElement,courtChemin)
         grandtableau.append(tmp_courtChemin)
     print(min(grandtableau))
-    print(grandtableau)
+    return min(grandtableau)
 
-#main("C:/Users/herve/OneDrive/Documents/GitHub/IFT2125_TP3/Q2 Escalade/wall5.txt")
-main("test.txt")
+main("C:/Users/herve/OneDrive/Documents/GitHub/IFT2125_TP3/Q2 Escalade/wall5.txt")
+#main("test.txt")
