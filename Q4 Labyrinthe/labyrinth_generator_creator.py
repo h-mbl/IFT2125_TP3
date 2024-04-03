@@ -24,7 +24,7 @@ class Strategy :
 class Algorithm1(Strategy) :
     pass
     #widson's algorithm
-    """""
+
     width = 13
     height = 13
     def adjacentCells(self,pos:(int,int)):
@@ -199,22 +199,20 @@ class Algorithm1(Strategy) :
     def Apply(self):
         #super().Apply()
         print("Applying Algorithm1")
-    """
+
 
 class Algorithm2(Strategy) :
+
+    #reccursive backtracker
     def __init__(self):
         super().__init__()
         # Définition de la longueur et la hauteur du labyrinthe
         self.width = 13
         self.height = 13
-        # Initialisation de la grille avec des murs (représentés par 1) et des cases non visitées
-        self.grid = [[1 for _ in range(self.width)] for _ in range(self.height)]
         # Initialisation de la matrice des cases visitées
         self.visited = [[False for _ in range(self.width)] for _ in range(self.height)]
         # Initialisation du chemin avec le point de départ (0,0)
         self.chemin = [(0, 0)]
-        self.stack = [(0, 0)]
-    #""""
 
     def backtracker(self, x, y):
         # ici,on cherhce les elements non-visites de notre element actuel
@@ -224,17 +222,18 @@ class Algorithm2(Strategy) :
             if not neighbors:
                 chemins = self.chercherbranche()
                 m = self.chemins2murs(chemins)
-                self.translateMap2SCAD(m)
-                return 0
+                code = self.translateMap2SCAD(m)
+                print(code)
+                break
 
             # on choisit aleatoirement  l'element qui sera place comme visite dans la liste des voisns
             nx, ny = random.choice(neighbors)
-            # on supprimer le mur
-            self.remove_wall(x, y, nx, ny)
             self.visited[ny][nx] = True
+
             # on fait une reccursion
             self.chemin.append((nx,ny))
             self.backtracker(nx, ny)
+        exit()
 
     def branche_backtracker(self, x, y):
         # ici,on cherhce les elements non-visites de notre element actuel
@@ -245,8 +244,6 @@ class Algorithm2(Strategy) :
                 return self.tmp_chemin
             # on choisit aleatoirement  l'element qui sera place comme visite dans la liste des voisns
             nx, ny = random.choice(neighbors)
-            # on supprimer le mur
-            self.remove_wall(x, y, nx, ny)
             self.visited[ny][nx] = True
             # on fait une reccursion
             self.tmp_chemin.append((nx, ny))
@@ -294,7 +291,6 @@ class Algorithm2(Strategy) :
                         if are_adjacent:
                             x1, y1 = cell1
                             x2, y2 = cell2
-                            self.remove_wall(x1, y1, x2, y2)
                             connection_cells.extend([(x1, y1), (x2, y2)])
                             connected = True
                             break
@@ -326,15 +322,6 @@ class Algorithm2(Strategy) :
             self.tmp_chemin = [(x, y)]
             self.branche_backtracker(x, y)
             chemin_principal.append(self.tmp_chemin)
-
-        """
-        unvisited = []
-        for w in range(self.width):  # initialisation
-            for h in range(self.height):
-                pair = (w, h)
-                if not self.visited[h][w]:
-                    unvisited.append(pair)
-        """
 
         unvisited = []
         for w in range(self.width):  # initialisation
@@ -369,7 +356,6 @@ class Algorithm2(Strategy) :
                             if are_adjacent:
                                 x1, y1 = path[i]
                                 x2, y2 = new_path[j]
-                                self.remove_wall(x1, y1, x2, y2)
                                 path.extend(new_path)
                                 unvisited = [cell for cell in unvisited if cell not in new_path]
                                 break
@@ -396,25 +382,10 @@ class Algorithm2(Strategy) :
         # retourne la liste
         return neighbors
 
-    def remove_wall(self, x, y, nx, ny):
-        # Si les cellules sont horizontalement adjacentes (x == nx),
-        # cela signifie qu'il y a un mur horizontal entre elles.
-        # Dans ce cas, la fonction met à 0 (supprime le mur) dans la grille aux positions [y][x] et [ny][nx].
-        # Cela crée un passage horizontal entre les deux cellules.
-        if x == nx:
-            self.grid[y][x] = 0
-            self.grid[ny][nx] = 0
-        # Si les cellules sont verticalement adjacentes (x != nx), cela signifie qu'il y a un mur vertical entre elles.
-        # Dans ce cas, la fonction met à 0 (supprime le mur) dans la grille aux positions [y][x] et [y][nx].
-        # Cela crée un passage vertical entre les deux cellules.
-        else:
-            self.grid[y][x] = 0
-            self.grid[y][nx] = 0
+
 
     def Apply(self):
         print("Applying Algorithm2")
-        # Forcer la première ligne (y = 0)
-        a = 0
         start_y  = 0
         # Choisir une colonne aléatoire, apparement il doit aussi commencer par 0
         start_x = 0
@@ -422,7 +393,8 @@ class Algorithm2(Strategy) :
         self.visited[start_y][start_x] = True
         # on appelle la fonction backtracker avec les starts elements
         self.backtracker(start_x, start_y)
-       # self.translateMap2SCAD('maze.scad', self.width, self.height)
+        print("je suis ici")
+        breakpoint()
     def adjacentCells(self,pos:(int,int)):
         directions = [(0,1),(1,0),(0,-1),(-1,0)]
         cellAdjacents = []
@@ -492,9 +464,6 @@ class Algorithm2(Strategy) :
                     if m[(p2,p1)] == 1:
                         result += self.murGeneration(p1,p2)
 
-
-        print(result)
-        breakpoint()
         return result
 
     def rotationOrNot(self, p1, p2):
