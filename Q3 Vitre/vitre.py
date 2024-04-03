@@ -33,7 +33,7 @@ def calcul_value(start, end, k, table):
         min_val = min(min_val, cost)
 
     table[start][end][k] = min_val  # Memoize the result
-    print(start,end,k)
+
     return min_val
 
 def vitre(N, k):
@@ -42,7 +42,7 @@ def vitre(N, k):
 
     tab[1][N][k] = calcul_value(1,N,k,tab) # on n'a pas besoin de calculer tous les elements du tab,
                                                 # il faut juste calculer les donnees(sous-questions) besoins
-    print(tab[1][N])
+
     return tab[1][N][k]
 
 

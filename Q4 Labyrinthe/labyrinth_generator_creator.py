@@ -21,13 +21,13 @@ class Strategy :
     def DoSomething(self):
         algo1 = Algorithm1()
         maze = algo1.initialisation()
-
+        
         print("Do Something")
 
 class Algorithm1(Strategy) :
     #widson's algorithm
-    width = 3
-    height = 3
+    width = 5
+    height = 5
     def adjacentCells(self,pos:(int,int)):
         directions = [(0,1),(1,0),(0,-1),(-1,0)]
         cellAdjacents = []
@@ -82,7 +82,6 @@ class Algorithm1(Strategy) :
 
         while len(unvisited) != 0 :
 
-
            # choix = random.choice(unvisited)
            # if(choix == start) : continue
             choix = random.choice(unvisited)
@@ -95,12 +94,9 @@ class Algorithm1(Strategy) :
                 if pos in unvisited: unvisited.remove(pos)
 
 
-
-
-
         #le resultat est une liste des chemins passes qui combinent le labyrinth
         m = self.chemins2murs(result)
-        code = self.translateMap2SCAD(m)
+        code = self.translateMap2SCAD(m) # le code sous forme .SCAD
         print(code)
         return result
 
@@ -140,12 +136,10 @@ class Algorithm1(Strategy) :
         elif (x,y) == (0,1): return True
 
 
-
-
     def translateMap2SCAD(self,m):
 
         #initialisation
-        print(m)
+
         result = "" #codeSCAD
 
         result += "translate([-0.5,-0.5,-1]) cube(["+ str(self.height * cell_size +1)+',' + str(self.width * cell_size + 1)+ ", 1]); \n"
@@ -164,29 +158,21 @@ class Algorithm1(Strategy) :
                 cases.append((x,y))
 
         for p1 in cases:
-
             adjacent = self.adjacentCells(p1)
             for p2 in adjacent:
 
-
-                if (p1,p2) in m:
+                if (p1,p2) in m: #generer le mur entre p1 et p2 si vailide
                     if m[(p1,p2)] == 1:
                         result += self.murGeneration(p1,p2)
-                        print(p1,p2)
 
 
                 elif (p2,p1) in m:
                     if m[(p2,p1)] == 1:
                         result += self.murGeneration(p1,p2)
-                        print(p1,p2)
 
-
-
-
-
-        print(result)
+        return result
     def murGeneration(self,p1,p2):
-        #generer le mur
+        #generer le mur entre p1 et p2
 
         rotation = self.rotationOrNot(p1, p2)
         rotation = rotation * 90
@@ -337,7 +323,7 @@ class Algorithm2(Strategy) :
                             # Générer le mur
                             result += f"translate([{cx + cell_size / 2}, {cy + cell_size / 2}, {wall_height / 2}]){{rotate([0,0,{rotation}]){{cube([{cell_size}, 1, {wall_height}], center = true);}}}}\n"
 
-        print(result)
+
         breakpoint()
         return result
 
@@ -375,7 +361,7 @@ def main():
     if strategy_choice == 1:
         my_generator.SetStrategy(Algorithm1())
     elif strategy_choice == 2:
-        my_generator.SetStrategy(Algorithm2())
+        my_generator.SetStrategy(Algorithm1())
     else :
         print("error strategy choice")
     my_generator.Generate()
