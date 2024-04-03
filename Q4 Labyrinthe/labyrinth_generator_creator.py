@@ -23,8 +23,8 @@ class Strategy :
 
 class Algorithm1(Strategy) :
     #widson's algorithm
-    width = 3
-    height = 3
+    width = 13
+    height = 13
     def adjacentCells(self,pos:(int,int)):
         directions = [(0,1),(1,0),(0,-1),(-1,0)]
         cellAdjacents = []
@@ -94,17 +94,19 @@ class Algorithm1(Strategy) :
 
 
 
-
         #le resultat est une liste des chemins passes qui combinent le labyrinth
+        print(len(result))
+        breakpoint()
         m = self.chemins2murs(result)
+        print(len(m))
+        breakpoint()
+
         code = self.translateMap2SCAD(m)
         print(code)
-        return result
+        return m
 
     def chemins2murs(self,chemins):
-
         m = dict()
-
         for chemin in chemins:
             last = chemin[0]
 
@@ -115,7 +117,6 @@ class Algorithm1(Strategy) :
 
                 m[(last,curr)] = 0
                 last = curr
-
             cases = []
         for x in range(self.width):
             for y in range(self.width):
@@ -129,20 +130,15 @@ class Algorithm1(Strategy) :
                         m[(pos,pos2)] = 1
         return m
 
-
     def rotationOrNot(self,p1,p2):
         x = abs(p1[0] - p2[0])
         y = abs(p1[1] - p2[1])
         if (x,y) == (1,0): return False
         elif (x,y) == (0,1): return True
 
-
-
-
     def translateMap2SCAD(self,m):
-
         #initialisation
-        print(m)
+
         result = "" #codeSCAD
 
         result += "translate([-0.5,-0.5,-1]) cube(["+ str(self.height * cell_size +1)+',' + str(self.width * cell_size + 1)+ ", 1]); \n"
@@ -161,7 +157,6 @@ class Algorithm1(Strategy) :
                 cases.append((x,y))
 
         for p1 in cases:
-
             adjacent = self.adjacentCells(p1)
             for p2 in adjacent:
 
@@ -169,28 +164,35 @@ class Algorithm1(Strategy) :
                 if (p1,p2) in m:
                     if m[(p1,p2)] == 1:
                         result += self.murGeneration(p1,p2)
-                        print(p1,p2)
+
 
 
                 elif (p2,p1) in m:
                     if m[(p2,p1)] == 1:
                         result += self.murGeneration(p1,p2)
-                        print(p1,p2)
+
+
+        return result
 
 
 
 
 
-        print(result)
     def murGeneration(self,p1,p2):
 
         rotation = self.rotationOrNot(p1, p2)
         rotation = rotation * 90
-        x = ((p1[0]+1) + (p2[0] +1)) / 2
-        y = ((p1[1] +1) + (p2[1] +1))/ 2
-        result = "translate([%f, %f, %f]){rotate([0,0,%f]){cube([%f,1,%f], center = true);} } \n" % (
-        cell_size * x, cell_size * y, wall_height / 2, rotation, cell_size + wall_thickness, wall_height)
+
+        if rotation != 0:
+            result = "translate([%f, %f, %f]){rotate([0,0,%f]){cube([%f,1,%f], center = true);} } \n" % (
+                (max(p1[1],p2[1]))*cell_size, p1[0] * cell_size+ cell_size/2, wall_height / 2, rotation, cell_size + wall_thickness, wall_height)
+        else:
+            result = "translate([%f, %f, %f]){rotate([0,0,%f]){cube([%f,1,%f], center = true);} } \n" % (
+                p1[1] * cell_size + cell_size/2, max(p1[0],p2[0]) * cell_size , wall_height / 2, rotation,
+                cell_size + wall_thickness, wall_height)
+
         return result
+
 
     def Apply(self):
         #super().Apply()
@@ -213,54 +215,92 @@ class Algorithm2(Strategy) :
 
     def backtracker(self, x, y):
         # ici,on cherhce les elements non-visites de notre element actuel
-        neighbors = self.get_unvisited_neighbors(x, y)
-        # si la liste est vide, ce qu'on a visite tous les elements proches
-        if not neighbors:
-            print(len(self.chemin))
-            breakpoint()
-            #m = self.chemins2murs2(self.chemin)
-            self.translateGridToSCAD()
-            return
-
-        # on choisit aleatoirement  l'element qui sera place comme visite dans la liste des voisns
-        nx, ny = random.choice(neighbors)
-        # on supprimer le mur
-        self.remove_wall(x, y, nx, ny)
-        self.visited[ny][nx] = True
-        # on fait une reccursion
-        self.chemin.append((nx,ny))
-        self.backtracker(nx, ny)
-
-    """
-    def backtracker(self, x, y):
-        # Marquer la cellule actuelle comme visitée
-        self.visited[y][x] = True
-        self.stack.append((x, y))  # Utilisez stack pour le backtracking
-        # Ajouter la cellule actuelle au chemin
-        self.chemin.append((x, y))
-
-        while self.chemin:
-            try:
-                x, y = self.stack[-1]  # Utiliser la dernière position dans le chemin
-            except:break
+        while True:
             neighbors = self.get_unvisited_neighbors(x, y)
-
+            # si la liste est vide, ce qu'on a visite tous les elements proches
             if not neighbors:
-                # Si aucun voisin non visité, reculer
-                self.stack.pop()
-            else:
-                # Choisir un voisin au hasard parmi les non visités
-                nx, ny = random.choice(neighbors)
-                # Supprimer le mur entre la cellule actuelle et le voisin choisi
-                self.remove_wall(x, y, nx, ny)
-                # Marquer le voisin comme visité et l'ajouter au chemin
-                self.stack.append((nx, ny))
-                self.visited[ny][nx] = True
-                self.chemin.append((nx, ny))
+                chemins = self.chercherbranche()
+                m = self.chemins2murs(chemins)
+                self.translateMap2SCAD(m)
+                return 0
+
+            # on choisit aleatoirement  l'element qui sera place comme visite dans la liste des voisns
+            nx, ny = random.choice(neighbors)
+            # on supprimer le mur
+            self.remove_wall(x, y, nx, ny)
+            self.visited[ny][nx] = True
+            # on fait une reccursion
+            self.chemin.append((nx,ny))
+            self.backtracker(nx, ny)
+
+    def branche_backtracker(self, x, y):
+        # ici,on cherhce les elements non-visites de notre element actuel
+        while True:
+            neighbors = self.get_unvisited_neighbors(x, y)
+            # si la liste est vide, ce qu'on a visite tous les elements proches
+            if not neighbors:
+                return self.tmp_chemin
+            # on choisit aleatoirement  l'element qui sera place comme visite dans la liste des voisns
+            nx, ny = random.choice(neighbors)
+            # on supprimer le mur
+            self.remove_wall(x, y, nx, ny)
+            self.visited[ny][nx] = True
+            # on fait une reccursion
+            self.tmp_chemin.append((nx, ny))
+            self.branche_backtracker(nx, ny)
+
+    def chercherbranche(self):
+        chemin_principal =[]
+
+        #print(self.visited)
+        for element in self.chemin :
+            x,y = element
+            self.tmp_chemin = [(x, y)]
+            self.branche_backtracker(x,y)
+
+            chemin_principal.append(self.tmp_chemin)
 
 
-        self.translateGridToSCAD()
-    # """
+        unvisited = []
+        for w in range(self.width):  # initialisation
+            for h in range(self.height):
+                pair = (w, h)
+                unvisited.append(pair)
+        while len(unvisited) > 0:
+
+            flattened_list = [item for sublist in chemin_principal for item in sublist]
+            for element in unvisited:
+                if element in flattened_list:
+                    unvisited.remove(element)
+            for element in unvisited:
+                x,y = element
+                self.visited[y][x] = True
+                self.tmp_chemin = [(x, y)]
+                self.branche_backtracker(x, y)
+                chemin_principal.append(self.tmp_chemin)
+
+        connexion =[]
+        for element in chemin_principal:
+            if len(element) == 1:
+                connexion.append(element)
+                chemin_principal.remove(element)
+        flattened_list = [item for sublist in connexion for item in sublist]
+        ok = []
+        for element in flattened_list :
+            x,y = element
+            tmp_chemin = [(x, y)]
+
+            liste_adj = self.adjacentCells((x,y))
+            for element in liste_adj :
+                if element in connexion and element not in ok :
+                    nx,ny = element
+                    tmp_chemin.append((nx,ny))
+                    ok.append((nx,ny))
+            if len(tmp_chemin) > 0:
+                chemin_principal.append(tmp_chemin)
+
+        return chemin_principal
+
     def get_unvisited_neighbors(self, x, y):
         # enregistre les elements visites
         neighbors = []
@@ -300,41 +340,102 @@ class Algorithm2(Strategy) :
         # on appelle la fonction backtracker avec les starts elements
         self.backtracker(start_x, start_y)
        # self.translateMap2SCAD('maze.scad', self.width, self.height)
+    def adjacentCells(self,pos:(int,int)):
+        directions = [(0,1),(1,0),(0,-1),(-1,0)]
+        cellAdjacents = []
 
-    def translateGridToSCAD(self):
-        # Initialisation du résultat SCAD
-        result =  "translate([-0.5,-0.5,-1]) cube(["+ str(self.height * cell_size +1)+',' + str(self.width * cell_size + 1)+ ", 1]); \n"
+        x = pos[0]
+        y = pos[1]
+        for direction in directions:
+            X = direction[0] + x
+            Y = direction[1] + y
+            if (X >= 0 and X < self.width  and
+                    (Y >= 0 and Y < self.height)):
+                cellAdjacents.append((X, Y))
+        return cellAdjacents
+    def chemins2murs(self, chemins):
+        m = dict()
+        for chemin in chemins:
+            last = chemin[0]
+
+            for i in range(1, len(chemin)):
+                curr = chemin[i]
+
+                m[(last, curr)] = 0
+                last = curr
+            cases = []
+        for x in range(self.width):
+            for y in range(self.width):
+                cases.append((x, y))
+        for pos in cases:
+            adjacent = self.adjacentCells(pos)
+            for pos2 in adjacent:
+                if (pos2, pos) not in m:
+                    if (pos, pos2) not in m:
+                        m[(pos, pos2)] = 1
+        return m
+
+    def translateMap2SCAD(self,m):
+        #initialisation
+
+        result = "" #codeSCAD
+
+        result += "translate([-0.5,-0.5,-1]) cube(["+ str(self.height * cell_size +1)+',' + str(self.width * cell_size + 1)+ ", 1]); \n"
         # base
-        milieu_width = self.width * cell_size / 2
-        milieu_height = self.height * cell_size / 2
-        result += "translate([0, %f, %f]){rotate([0,0,90]){cube([%f,1,%f], center = true);}} \n" % (
-        milieu_height + cell_size / 2, cell_size / 2, self.height * cell_size + 1 - cell_size, wall_height)
-        result += "translate([%f, %f, %f]){rotate([0,0,90]){cube([%f,1,%f], center = true);}} \n" % (
-        cell_size * self.height, milieu_height, cell_size / 2, self.height * cell_size + 1, wall_height)
-        result += "translate([%f, 0, %f]){cube([%f,1,%f], center = true);} \n" % (
-        milieu_width, cell_size / 2, self.height * cell_size + 1, wall_height)
-        result += "translate([%f, %f, %f]){cube([%f,1,%f], center = true);} \n" % (
-        milieu_width, cell_size * self.width, cell_size / 2, self.height * cell_size + 1, wall_height)
+        milieu_width = self.width * cell_size/2
+        milieu_height = self.height * cell_size/2
+        # les 4 grand murs
+        result += "translate([0, %f, %f]){rotate([0,0,90]){cube([%f,1,%f], center = true);}} \n" %(milieu_height+ cell_size/2, cell_size/2 ,  self.height * cell_size +1 - cell_size,wall_height)
+        result += "translate([%f, %f, %f]){rotate([0,0,90]){cube([%f,1,%f], center = true);}} \n" % (cell_size*self.height,milieu_height, cell_size / 2, self.height * cell_size + 1, wall_height)
+        result += "translate([%f, 0, %f]){cube([%f,1,%f], center = true);} \n" % (milieu_width, cell_size / 2, self.height * cell_size + 1, wall_height)
+        result += "translate([%f, %f, %f]){cube([%f,1,%f], center = true);} \n" % (milieu_width, cell_size * self.width,cell_size/2, self.height * cell_size + 1, wall_height)
 
-        # Générer les côtés des murs
-        for y in range(self.height):
-            for x in range(self.width):
-                if self.grid[y][x] == 1:  # C'est un mur
-                    # Vérifier chaque direction pour les passages adjacents
-                    directions = [(0, -1), (1, 0), (0, 1), (-1, 0)]  # Sud, Est, Nord, Ouest
-                    for dx, dy in directions:
-                        nx, ny = x + dx, y + dy
-                        #if 0 <= nx < self.width and 0 <= ny < self.height and self.grid[ny][nx] == 0:
-                        if 0 <= nx < self.width and 0 <= ny < self.height and [ny,nx] not in self.visited:
-                            # Calculer la position et l'orientation du mur
-                            cx = x * cell_size + (dx * cell_size / 2)
-                            cy = y * cell_size + (dy * cell_size / 2)
-                            rotation = 0 if dy == 0 else 90
-                            # Générer le mur
-                            result += f"translate([{cx + cell_size / 2}, {cy + cell_size / 2}, {wall_height / 2}]){{rotate([0,0,{rotation}]){{cube([{cell_size}, 1, {wall_height}], center = true);}}}}\n"
+        cases = []
+        for x in range(self.width):
+            for y in range(self.height):
+                cases.append((x,y))
+
+        for p1 in cases:
+            adjacent = self.adjacentCells(p1)
+            for p2 in adjacent:
+
+
+                if (p1,p2) in m:
+                    if m[(p1,p2)] == 1:
+                        result += self.murGeneration(p1,p2)
+
+
+
+                elif (p2,p1) in m:
+                    if m[(p2,p1)] == 1:
+                        result += self.murGeneration(p1,p2)
+
 
         print(result)
-        breakpoint()
+        return result
+
+    def rotationOrNot(self, p1, p2):
+        x = abs(p1[0] - p2[0])
+        y = abs(p1[1] - p2[1])
+        if (x, y) == (1, 0):
+            return False
+        elif (x, y) == (0, 1):
+            return True
+
+
+    def murGeneration(self,p1,p2):
+
+        rotation = self.rotationOrNot(p1, p2)
+        rotation = rotation * 90
+
+        if rotation != 0:
+            result = "translate([%f, %f, %f]){rotate([0,0,%f]){cube([%f,1,%f], center = true);} } \n" % (
+                (max(p1[1],p2[1]))*cell_size, p1[0] * cell_size+ cell_size/2, wall_height / 2, rotation, cell_size + wall_thickness, wall_height)
+        else:
+            result = "translate([%f, %f, %f]){rotate([0,0,%f]){cube([%f,1,%f], center = true);} } \n" % (
+                p1[1] * cell_size + cell_size/2, max(p1[0],p2[0]) * cell_size , wall_height / 2, rotation,
+                cell_size + wall_thickness, wall_height)
+
         return result
 
 
