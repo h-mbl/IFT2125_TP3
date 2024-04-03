@@ -1,5 +1,5 @@
-#Nom, matricule
-#Nom, matricule
+# Qiwu Wen, 20230961
+# herve ngisse,20204609
 import sys
 #Fonction à compléter. Ne modifiez pas sa signature.
 #N : Force maximale

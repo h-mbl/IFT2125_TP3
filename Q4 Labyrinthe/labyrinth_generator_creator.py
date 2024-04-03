@@ -1,3 +1,6 @@
+# Qiwu Wen, 20230961
+# herve ngisse,20204609
+
 import sys
 import random
 
@@ -183,6 +186,7 @@ class Algorithm1(Strategy) :
 
         print(result)
     def murGeneration(self,p1,p2):
+        #generer le mur
 
         rotation = self.rotationOrNot(p1, p2)
         rotation = rotation * 90
