@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="418bacef-eeab-41fb-99ad-f7f2ac7abd0d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/IFT2125_TP3.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/IFT2125_TP3.iml" afterDir="false" />
+    <list default="true" id="418bacef-eeab-41fb-99ad-f7f2ac7abd0d" name="Changes" comment="n">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q2 Escalade/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/Q2 Escalade/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test2.py" beforeDir="false" afterPath="$PROJECT_DIR$/test2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q4 Labyrinthe/labyrinth_generator_creator.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q4 Labyrinthe/labyrinth_generator_creator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q4 Labyrinthe/maze.scad" beforeDir="false" afterPath="$PROJECT_DIR$/Q4 Labyrinthe/maze.scad" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +53,8 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Python.labyrinth_generator_creator.executor": "Debug",
+    "Python.algorithm1.executor": "Run",
+    "Python.labyrinth_generator_creator.executor": "Run",
     "Python.q2.executor": "Run",
     "Python.test.executor": "Run",
     "Python.test1.executor": "Run",
@@ -123,7 +122,18 @@
       <workItem from="1711741284411" duration="16647000" />
       <workItem from="1712033453654" duration="6473000" />
       <workItem from="1712075791282" duration="1564000" />
+      <workItem from="1712113340016" duration="14996000" />
+      <workItem from="1712130191950" duration="2287000" />
     </task>
+    <task id="LOCAL-00001" summary="n">
+      <option name="closed" value="true" />
+      <created>1712113462271</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1712113462271</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -140,6 +150,10 @@
       </map>
     </option>
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="n" />
+    <option name="LAST_COMMIT_MESSAGE" value="n" />
+  </component>
   <component name="XDebuggerManager">
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -150,13 +164,15 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/IFT2125_TP3$test.coverage" NAME="test Coverage Results" MODIFIED="1711843967031" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/labyrinth_generator_creator_py$labyrinth_generator_creator.coverage" NAME="labyrinth_generator_creator Coverage Results" MODIFIED="1712033485825" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/labyrinth_generator_creator_py$labyrinth_generator_creator.coverage" NAME="labyrinth_generator_creator Coverage Results" MODIFIED="1712132449394" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/IFT2125_TP3$test1.coverage" NAME="test1 Coverage Results" MODIFIED="1711843977781" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/labyrinth_generator_creator_py$testdjiskra.coverage" NAME="testdjiskra Coverage Results" MODIFIED="1712086258249" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/IFT2125_TP3$q2.coverage" NAME="q2 Coverage Results" MODIFIED="1711645394360" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/IFT2125_TP3$test2.coverage" NAME="test2 Coverage Results" MODIFIED="1711932358468" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/labyrinth_generator_creator_py$test.coverage" NAME="test Coverage Results" MODIFIED="1712076985178" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/labyrinth_generator_creator_py$test.coverage" NAME="test Coverage Results" MODIFIED="1712077379363" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/IFT2125_TP3$maze.coverage" NAME="maze Coverage Results" MODIFIED="1711904262411" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Q4 Labyrinthe" />
-    <SUITE FILE_PATH="coverage/labyrinth_generator_creator_py$test2.coverage" NAME="test2 Coverage Results" MODIFIED="1712077363490" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/labyrinth_generator_creator_py$test2.coverage" NAME="test2 Coverage Results" MODIFIED="1712086282202" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/labyrinth_generator_creator_py$algorithm1.coverage" NAME="algorithm1 Coverage Results" MODIFIED="1712130998262" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/IFT2125_TP3$labyrinth_generator_creator.coverage" NAME="labyrinth_generator_creator Coverage Results" MODIFIED="1711937263176" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Q4 Labyrinthe" />
   </component>
 </project>

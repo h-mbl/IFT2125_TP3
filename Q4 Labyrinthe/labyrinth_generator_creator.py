@@ -17,12 +17,14 @@ class Strategy :
 
     def DoSomething(self):
         algo1 = Algorithm1()
-        maze = algo1.initialisation()
+        #maze = algo1.initialisation()
 
         print("Do Something")
 
 class Algorithm1(Strategy) :
+    pass
     #widson's algorithm
+    """""
     width = 13
     height = 13
     def adjacentCells(self,pos:(int,int)):
@@ -197,6 +199,7 @@ class Algorithm1(Strategy) :
     def Apply(self):
         #super().Apply()
         print("Applying Algorithm1")
+    """
 
 class Algorithm2(Strategy) :
     def __init__(self):
@@ -249,55 +252,135 @@ class Algorithm2(Strategy) :
             self.tmp_chemin.append((nx, ny))
             self.branche_backtracker(nx, ny)
 
+    def connect_nodes(self, chemin_principal):
+        connection_nodes = []
+
+        for i in range(len(chemin_principal)):
+            path1 = chemin_principal[i]
+            connected = False
+
+            for j in range(i + 1, len(chemin_principal)):
+                path2 = chemin_principal[j]
+
+                for cell1 in path1:
+                    adjacent_cells1 = self.adjacentCells(cell1)
+
+                    for cell2 in path2:
+                        if cell2 in adjacent_cells1:
+                            connection_nodes.append((cell1, cell2))
+                            connected = True
+                            break
+
+                    if connected:
+                        break
+
+        return connection_nodes
+
+    def connect_paths(self, chemin_principal):
+        connected_paths = []
+        connection_cells = []
+
+        while chemin_principal:
+            path = chemin_principal.pop(0)
+            connected = False
+
+            # Vérifier si le chemin actuel a des cellules adjacentes avec les autres chemins
+            for other_path in chemin_principal:
+                for cell1 in path:
+                    for cell2 in other_path:
+                        adjacent_cells = self.adjacentCells(cell1)
+                        if cell2 in adjacent_cells: are_adjacent = True
+                        else : are_adjacent=False
+                        if are_adjacent:
+                            x1, y1 = cell1
+                            x2, y2 = cell2
+                            self.remove_wall(x1, y1, x2, y2)
+                            connection_cells.extend([(x1, y1), (x2, y2)])
+                            connected = True
+                            break
+                    if connected:
+                        break
+
+            if connected:
+                connected_paths.append(path)
+            else:
+                connected_paths.append(path)
+
+        # Ajouter les cellules de connexion dans les chemins connectés
+        for cell1, cell2 in connection_cells:
+            for path in connected_paths:
+                if cell1 in path:
+                    path.append(cell2)
+                elif cell2 in path:
+                    path.append(cell1)
+
+        return connected_paths
     def chercherbranche(self):
-        chemin_principal =[]
+        chemin_principal = []
 
-        #print(self.visited)
-        for element in self.chemin :
-            x,y = element
+        to_add = self.chemin
+
+        # Trouver tous les chemins formés par l'algorithme de backtracking
+        for element in self.chemin:
+            x, y = element
             self.tmp_chemin = [(x, y)]
-            self.branche_backtracker(x,y)
-
+            self.branche_backtracker(x, y)
             chemin_principal.append(self.tmp_chemin)
 
+        """
+        unvisited = []
+        for w in range(self.width):  # initialisation
+            for h in range(self.height):
+                pair = (w, h)
+                if not self.visited[h][w]:
+                    unvisited.append(pair)
+        """
 
         unvisited = []
         for w in range(self.width):  # initialisation
             for h in range(self.height):
                 pair = (w, h)
                 unvisited.append(pair)
-        while len(unvisited) > 0:
 
-            flattened_list = [item for sublist in chemin_principal for item in sublist]
-            for element in unvisited:
-                if element in flattened_list:
-                    unvisited.remove(element)
-            for element in unvisited:
-                x,y = element
-                self.visited[y][x] = True
+        flattened_list = [item for sublist in chemin_principal for item in sublist]
+        for element in unvisited:
+            if element in flattened_list:
+                unvisited.remove(element)
+
+
+        # Connecter les cellules non visitées aux chemins existants
+        while unvisited:
+            new_paths = []
+            for cell in unvisited:
+                x, y = cell
                 self.tmp_chemin = [(x, y)]
                 self.branche_backtracker(x, y)
-                chemin_principal.append(self.tmp_chemin)
+                new_paths.append(self.tmp_chemin)
 
-        connexion =[]
-        for element in chemin_principal:
-            if len(element) == 1:
-                connexion.append(element)
-                chemin_principal.remove(element)
-        flattened_list = [item for sublist in connexion for item in sublist]
-        ok = []
-        for element in flattened_list :
-            x,y = element
-            tmp_chemin = [(x, y)]
+            for new_path in new_paths:
+                for path in chemin_principal:
+                    for i in range(len(path)):
+                        for j in range(len(new_path)):
+                            cellsadjacent = self.adjacentCells(path[i])
+                            if new_path[j] in cellsadjacent:
+                                are_adjacent = True
+                            else:
+                                are_adjacent = False
+                            if are_adjacent:
+                                x1, y1 = path[i]
+                                x2, y2 = new_path[j]
+                                self.remove_wall(x1, y1, x2, y2)
+                                path.extend(new_path)
+                                unvisited = [cell for cell in unvisited if cell not in new_path]
+                                break
 
-            liste_adj = self.adjacentCells((x,y))
-            for element in liste_adj :
-                if element in connexion and element not in ok :
-                    nx,ny = element
-                    tmp_chemin.append((nx,ny))
-                    ok.append((nx,ny))
-            if len(tmp_chemin) > 0:
-                chemin_principal.append(tmp_chemin)
+        connexion_chemin = self.connect_paths(chemin_principal)
+        chemin_principal = chemin_principal + connexion_chemin + [to_add]
+        connexion_node = self.connect_nodes(chemin_principal)
+        connexion_node = set(connexion_node)
+        connexion_node = list(connexion_node)
+        # Transformer la liste
+        connexion_node = [[subliste[0], subliste[1]] for subliste in connexion_node]
 
         return chemin_principal
 
@@ -376,9 +459,8 @@ class Algorithm2(Strategy) :
         return m
 
     def translateMap2SCAD(self,m):
-        #initialisation
 
-        result = "" #codeSCAD
+        result = ""
 
         result += "translate([-0.5,-0.5,-1]) cube(["+ str(self.height * cell_size +1)+',' + str(self.width * cell_size + 1)+ ", 1]); \n"
         # base
@@ -412,6 +494,7 @@ class Algorithm2(Strategy) :
 
 
         print(result)
+        breakpoint()
         return result
 
     def rotationOrNot(self, p1, p2):
@@ -437,6 +520,7 @@ class Algorithm2(Strategy) :
                 cell_size + wall_thickness, wall_height)
 
         return result
+
 
 
 class Generator() :
