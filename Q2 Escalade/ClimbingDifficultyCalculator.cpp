@@ -96,23 +96,18 @@ int ClimbingDifficultyCalculator::CalculateClimbingDifficulty(std::string filena
             dp[i][j] = wall[i][j] + dp[i + 1][j]; 
         }
 
-        bool updated = true;
-    for (int k = 0; k < n - 1; ++k) {
+       
+    for (int k = 0; k < n - 1; ++k) { // il y a au maximum n-1 changement horizontal
         for (int j = 0; j < n; ++j) {
             
-            dp[i][j] = rightLeft(dp, i, j, wall);
+            dp[i][j] = rightLeft(dp, i, j, wall); //fait echanger horizontalement
         }
     }
     }
 
     
-   // cout << "DP Table:" << endl;
-    for (int i = 0; i < m; ++i) {
-        for (int j = 0; j < n; ++j) {
-            cout << to_string(dp[i][j]) << " ";
-    }
-    cout << endl; // Move to the next line after printing each row
-    }
+   
+    
 
     // Find the minimum difficulty path from the top row
 
